@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Каталог товаров</h2>
+
+<!-- Фильтры -->
+<div class="filters">
+    <form method="get" action="">
+        <label for="sort">Сортировать по:</label>
+        <select name="sort" id="sort" onchange="this.form.submit()">
+            <option value="">Выберите...</option>
+            <option value="price_asc" {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Цене (по возрастанию)</option>
+            <option value="price_desc" {% if request.GET.sort == 'price_desc' %}selected{% endif %}>Цене (по убыванию)</option>
+            <option value="name_asc" {% if request.GET.sort == 'name_asc' %}selected{% endif %}>Названию (А-Я)</option>
+            <option value="name_desc" {% if request.GET.sort == 'name_desc' %}selected{% endif %}>Названию (Я-А)</option>
+        </select>
+    </form>
+</div>
+
+<!-- Список товаров -->
+<div class="catalog">
+    <ul>
+        {% for product in products %}
+        <li class="product-item">
+            <h3>{{ product.name }}</h3>
+            <p>Цена: {{ product.price }} руб.</p>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 150px;">
+            {% endif %}
+            <p><a href="/shop/product/{{ product.id }}/" class="btn">Подробнее</a></p>
+            <form method="post" action="/shop/cart/add/{{ product.id }}/">
+                {% csrf_token %}
+                <button type="submit" class="btn">Добавить в корзину</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Пагинация -->
+<div class="pagination">
+    {% if products.has_previous %}
+    <a href="?page={{ products.previous_page_number }}&sort={{ request.GET.sort }}">Предыдущая</a>
+    {% endif %}
+    <span>Страница {{ products.number }} из {{ products.paginator.num_pages }}</span>
+    {% if products.has_next %}
+    <a href="?page={{ products.next_page_number }}&sort={{ request.GET.sort }}">Следующая</a>
+    {% endif %}
+</div>
+{% endblock %}

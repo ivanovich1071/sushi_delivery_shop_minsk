@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Добро пожаловать в Суши Доставку!</h2>
+<p>У нас вы найдете свежие и вкусные сеты, суши и роллы.</p>
+<div class="features">
+    <h3>Популярные товары</h3>
+    <ul>
+        {% for product in popular_products %}
+        <li>
+            <h4>{{ product.name }}</h4>
+            <p>Цена: {{ product.price }} руб.</p>
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 150px;">
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<a href="/shop/catalog/" class="btn">Перейти в каталог</a>
+{% endblock %}
