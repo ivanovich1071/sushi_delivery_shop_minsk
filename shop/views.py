@@ -25,8 +25,16 @@ def index(request):
     return render(request, 'shop/index.html', context)
 
 def catalog(request):
-    """Страница каталога товаров"""
-    return render(request, 'shop/catalog.html')
+    sort = request.GET.get('sort', '')  # Получаем параметр сортировки из GET-запроса
+    products = Product.objects.all()
+
+    if sort in ['price', '-price', 'name']:  # Проверяем, является ли параметр корректным
+        products = products.order_by(sort)
+
+    context = {
+        'products': products,
+    }
+    return render(request, 'shop/catalog.html', context)
 
 def login_view(request):
     """Страница входа"""
