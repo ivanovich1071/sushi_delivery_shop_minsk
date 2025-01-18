@@ -1,4 +1,5 @@
 from django.views.generic import ListView
+from django.shortcuts import render
 from .models import Product
 
 class ProductListView(ListView):
@@ -14,3 +15,23 @@ class ProductListView(ListView):
         elif sort == 'name':
             queryset = queryset.order_by('name')
         return queryset
+
+def index(request):
+    """Главная страница с популярными товарами"""
+    popular_products = Product.objects.filter(popular=True).order_by('-price')[:5]  # Популярные товары
+    context = {
+        'popular_products': popular_products,
+    }
+    return render(request, 'shop/index.html', context)
+
+def catalog(request):
+    """Страница каталога товаров"""
+    return render(request, 'shop/catalog.html')
+
+def login_view(request):
+    """Страница входа"""
+    return render(request, 'shop/login.html')
+
+def register(request):
+    """Страница регистрации"""
+    return render(request, 'shop/register.html')

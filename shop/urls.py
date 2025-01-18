@@ -1,6 +1,11 @@
 from django.urls import path
-from .views import ProductListView
+from . import views
+
+app_name = 'shop'
 
 urlpatterns = [
-    path('products/', ProductListView.as_view(), name='product_list'),
+    path('', views.index, name='index'),  # Главная страница
+    path('catalog/', views.catalog, name='catalog'),  # Каталог товаров
+    path('login/', views.login_view, name='login'),  # Страница входа
+    path('register/', views.register, name='register'),  # Страница регистрации
 ]
